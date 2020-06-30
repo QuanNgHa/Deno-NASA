@@ -1,4 +1,4 @@
-import { Application } from "https://deno.land/x/oak@v5.0.0/mod.ts";
+import { Application, send } from "https://deno.land/x/oak@v5.0.0/mod.ts";
 
 //Application has two method: .listen() & .use() to register middlewares with OAK
 const app = new Application();
@@ -37,6 +37,24 @@ app.use(async (ctx, next) => {
   {__      {__{__         {__  {__ __  {__         {__
                   Mission Control API`;
   await next();
+});
+
+//Back-End connection with Front-End Static File
+
+//[Send] function from OAK to connect with Front-End
+app.use(async (ctx) => {
+  const filePath = ctx.request.url.pathname;
+  //White-listing: ensure Deno serving the files which we are expected.
+  const fileWhiteList = [
+    "/index.html",
+    "/javascripts/script.js",
+    "/stylesheets/style.css",
+    "/images/favicon.png",
+  ];
+  await send(ctx, filePath, {
+    //Deno.cwd = current working directory path where we run "deno run" command
+    root: `${Deno.cwd()}/public`,
+  });
 });
 
 if (import.meta.main) {
