@@ -1,5 +1,7 @@
 import { Application, send } from "https://deno.land/x/oak@v5.0.0/mod.ts";
 
+import api from "./api.ts";
+
 //Application has two method: .listen() & .use() to register middlewares with OAK
 const app = new Application();
 const PORT = 8000;
@@ -26,21 +28,14 @@ app.use(async (ctx, next) => {
   ctx.response.headers.set("X-Response-Time", `${delta} ms`);
 });
 
-app.use(async (ctx, next) => {
-  ctx.response.body = `
-  {___     {__      {_         {__ __        {_       
-  {_ {__   {__     {_ __     {__    {__     {_ __     
-  {__ {__  {__    {_  {__     {__          {_  {__    
-  {__  {__ {__   {__   {__      {__       {__   {__   
-  {__   {_ {__  {______ {__        {__   {______ {__  
-  {__    {_ __ {__       {__ {__    {__ {__       {__ 
-  {__      {__{__         {__  {__ __  {__         {__
-                  Mission Control API`;
-  await next();
-});
+//api.routes() = router.routes()
+//router.routes(): return middleware that will do all the route processing
+//that the router has been configured to handle.
+//Will know which endpoint, say "/", "/planets", we should handle the request
+app.use(api.routes());
+app.use(api.allowedMethods());
 
 //Back-End connection with Front-End Static File
-
 //[Send] function from OAK to connect with Front-End
 app.use(async (ctx) => {
   const filePath = ctx.request.url.pathname;
@@ -51,10 +46,13 @@ app.use(async (ctx) => {
     "/stylesheets/style.css",
     "/images/favicon.png",
   ];
-  await send(ctx, filePath, {
-    //Deno.cwd = current working directory path where we run "deno run" command
-    root: `${Deno.cwd()}/public`,
-  });
+
+  if (fileWhiteList.includes(filePath)) {
+    await send(ctx, filePath, {
+      //Deno.cwd = current working directory path where we run "deno run" command
+      root: `${Deno.cwd()}/public`,
+    });
+  }
 });
 
 if (import.meta.main) {
