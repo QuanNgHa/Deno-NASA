@@ -33,6 +33,7 @@ app.use(async (ctx, next) => {
 //that the router has been configured to handle.
 //Will know which endpoint, say "/", "/planets", we should handle the request
 app.use(api.routes());
+//Will block other methods which dont specify in api.ts
 app.use(api.allowedMethods());
 
 //Back-End connection with Front-End Static File

@@ -41,13 +41,12 @@ async function loadPlanetsData() {
   return planets.map((planet) => {
     //Using Lodash to filter only columns we want as per each planet
     return _.pick(planet, [
+      "kepler_name",
       "koi_prad",
       "koi_smass",
       "koi_srad",
-      "kepoi_name",
       "koi_count",
       "koi_steff",
-      "koi_period",
     ]);
   });
 }

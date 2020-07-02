@@ -1,3 +1,4 @@
+// @ts-nocheck
 let launches = [];
 
 const numberHeading = "No.".padStart(5);
@@ -21,15 +22,15 @@ function loadLaunches() {
 
 function loadPlanets() {
   // TODO: Once API is ready.
-  const planets = [
-    { kepler_name: "BTD" },
-    { kepler_name: "The Hanger Game" },
-  ];
-  const planetSelector = document.getElementById("planets-selector");
-  planets.forEach((planet) => {
-    planetSelector.innerHTML +=
-      `<option value="${planet.kepler_name}">${planet.kepler_name}</option>`;
-  });
+  return fetch("/planets")
+    .then((planetsresponse) => planetsresponse.json()) //take body of res and parse as JSON
+    .then((planets) => {
+      const planetSelector = document.getElementById("planets-selector");
+      planets.forEach((planet) => {
+        planetSelector.innerHTML +=
+          `<option value="${planet.kepler_name}">${planet.kepler_name}</option>`;
+      });
+    });
 }
 
 function abortLaunch() {
