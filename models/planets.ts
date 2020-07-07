@@ -11,6 +11,20 @@ type Planet = Record<string, string>;
 //   [key: string]: string;
 // }
 
+export function filterHabitablePlanets(planets: Array<Planet>) {
+  return planets.filter((planet) => {
+    //Get Planet's radius
+    const plantaryRadius = Number(planet["koi_prad"]); //Casting from string to number
+    const stellarMass = Number(planet["koi_smass"]);
+    const stellarRadius = Number(planet["koi_srad"]);
+
+    return planet["koi_disposition"] === "CONFIRMED" &&
+      plantaryRadius > 0.5 && plantaryRadius < 1.5 &&
+      stellarMass > 0.78 && stellarMass < 1.04 &&
+      stellarRadius > 0.99 && stellarRadius < 1.01;
+  });
+}
+
 let planets: Array<Planet>;
 
 async function loadPlanetsData() {
@@ -26,17 +40,8 @@ async function loadPlanetsData() {
   Deno.close(file.rid);
 
   //Filter those Habitable planets similar to the Earth
-  const planets = (result as Array<Planet>).filter((planet) => {
-    //Get Planet's radius
-    const plantaryRadius = Number(planet["koi_prad"]); //Casting from string to number
-    const stellarMass = Number(planet["koi_smass"]);
-    const stellarRadius = Number(planet["koi_srad"]);
-
-    return planet["koi_disposition"] === "CONFIRMED" &&
-      plantaryRadius > 0.5 && plantaryRadius < 1.5 &&
-      stellarMass > 0.78 && stellarMass < 1.04 &&
-      stellarRadius > 0.99 && stellarRadius < 1.01;
-  });
+  //result as Array<Planet>: Type Assertion
+  const planets = filterHabitablePlanets(result as Array<Planet>);
   //console.log(result);
   return planets.map((planet) => {
     //Using Lodash to filter only columns we want as per each planet
