@@ -45,4 +45,13 @@ router.get("/launches/:id", (ctx) => {
   }
 });
 
+router.post("/launches", async (ctx) => {
+  const body = await ctx.request.body();
+
+  launches.addOne(body.value);
+
+  ctx.response.body = { success: true };
+  ctx.response.status = 201;
+});
+
 export default router;

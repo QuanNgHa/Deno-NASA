@@ -51,21 +51,26 @@ function submitLaunch() {
   const launchDate = new Date(document.getElementById("launch-day").value);
   const mission = document.getElementById("mission-name").value;
   const rocket = document.getElementById("rocket-name").value;
-  const flightNumber = launches[launches.length - 1]?.flightNumber + 1 || 1;
-  const customers = ["NASA", "ZTM"];
-  // TODO: Once API is ready.
-  // Submit above data to launch system and reload launches.
-  launches.push({
-    upcoming: true,
-    //launchDate: launchDate, => Can be reduced to launchDate
-    launchDate: launchDate / 1000,
-    flightNumber,
-    mission,
-    rocket,
-    target,
-    customers,
-  });
-  document.getElementById("launch-success").hidden = false;
+  const flightNumber = launches[launches.length - 1].flightNumber + 1;
+
+  return fetch("/launches", {
+    method: "post",
+    //headers is required by OAK to parse the Body correctly
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      launchDate: Math.floor(launchDate / 1000),
+      flightNumber,
+      mission,
+      rocket,
+      target,
+    }),
+  })
+    .then(() => {
+      document.getElementById("launch-success").hidden = false;
+    })
+    .then(loadLaunches);
 }
 
 function listUpcoming() {

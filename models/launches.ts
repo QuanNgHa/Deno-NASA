@@ -75,6 +75,7 @@ export function removeOne(id: number) {
 export function addOne(data: Launch) {
   launches.set(
     data.flightNumber,
+    //Object.assign(data object, additional fields you want to add)
     Object.assign(data, {
       upcoming: true,
       customers: ["Zero to Mastery", "NASA"],
