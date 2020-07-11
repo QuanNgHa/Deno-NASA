@@ -65,6 +65,7 @@ export function getOne(id: number) {
 
 export function removeOne(id: number) {
   const aborted = launches.get(id);
+  //if (aborted) = we can find this launch in launches
   if (aborted) {
     aborted.upcoming = false;
     aborted.success = false;

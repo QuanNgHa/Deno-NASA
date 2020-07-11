@@ -41,9 +41,14 @@ function loadPlanets() {
     });
 }
 
-function abortLaunch() {
+function abortLaunch(id) {
   // TODO: Once API is ready.
   // Delete launch and reload launches.
+  return fetch(`/launches/${id}`, {
+    method: "delete",
+  })
+    .then(loadLaunches)
+    .then(listUpcoming);
 }
 
 function submitLaunch() {
