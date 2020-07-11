@@ -5,6 +5,8 @@ import { parse } from "https://deno.land/std/encoding/csv.ts";
 //Import lodash : Third Party Module
 import * as _ from "https://deno.land/x/lodash@4.17.15-es/lodash.js";
 
+import * as log from "https://deno.land/std/log/mod.ts";
+
 type Planet = Record<string, string>;
 // interface Planet {
 //   // Planet is an object with key = type of string; value = type of string
@@ -42,7 +44,7 @@ async function loadPlanetsData() {
   //Filter those Habitable planets similar to the Earth
   //result as Array<Planet>: Type Assertion
   const planets = filterHabitablePlanets(result as Array<Planet>);
-  //console.log(result);
+  //log.info(result);
   return planets.map((planet) => {
     //Using Lodash to filter only columns we want as per each planet
     return _.pick(planet, [
@@ -57,7 +59,7 @@ async function loadPlanetsData() {
 }
 
 planets = await loadPlanetsData();
-console.log(`${planets.length} habitable planets found!`);
+log.info(`${planets.length} habitable planets found!`);
 
 export function getAllPlanets() {
   return planets;

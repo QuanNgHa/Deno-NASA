@@ -74,7 +74,7 @@ Deno.test({
   //Will ignore async functions which are yet to complete
   sanitizeOps: false,
   fn() {
-    setTimeout(console.log, 10000);
+    setTimeout(log.info, 10000);
   },
 });
 
