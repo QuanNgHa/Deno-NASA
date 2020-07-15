@@ -29,7 +29,9 @@ export function filterHabitablePlanets(planets: Array<Planet>) {
 let planets: Array<Planet>;
 
 async function loadPlanetsData() {
+  //current Path follows mod.ts
   const path = join("data", "kepler_exoplanets_nasa.csv");
+  log.info(path);
 
   const file = await Deno.open(path);
   const bufReader = new BufReader(file);
